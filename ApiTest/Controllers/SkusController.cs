@@ -74,6 +74,7 @@ namespace ApiTest.Controllers
 
         // POST: api/skus
         [HttpPost]
+        [Route("api/skus")]
         [ResponseType(typeof(Sku))]
         public IHttpActionResult PostSku(Sku sku)
         {
