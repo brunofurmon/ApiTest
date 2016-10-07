@@ -21,17 +21,20 @@ namespace ApiTest.Daos
         T Delete(long id);
     }
 
-    public class AbstractDao<T>: DbContext, IAbstractDao<T> where T: AbstractModel
+    public class AbstractDao<T> : DbContext, IAbstractDao<T> where T : AbstractModel
     {
-        public AbstractDao() : base("name=TServiceContext")
+        public AbstractDao() : base("name=ApiTest")
         {
         }
-
-        private DbSet<T> db { get; set; }
+        public virtual DbSet<T> db { get; set; }
 
         // GET: api/T
         public List<T> List()
         {
+            if (db.Count() == 0)
+            {
+                return null;
+            }
             return db.ToList();
         }
 
@@ -50,7 +53,7 @@ namespace ApiTest.Daos
         public T Update(long id, T bean)
         {
             this.Entry(bean).State = EntityState.Modified;
-  
+
             try
             {
                 this.SaveChanges();
