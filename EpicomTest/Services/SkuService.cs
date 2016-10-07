@@ -1,12 +1,17 @@
-﻿using System;
+﻿using ApiTest.Models;
+using ApiTest.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
 
-namespace EpicomTest.Services
+namespace ApiTest.Services
 {
-    public class SkuService
+    public class SkuService : AbstractService<Sku>, IAbstractService<Sku>
     {
+        public SkuService() : base()
+        {
+        }
     }
 }

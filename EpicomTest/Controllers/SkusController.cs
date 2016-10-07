@@ -1,34 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
-using EpicomTest.Models;
-using EpicomTest.Daos;
+using ApiTest.Models;
+using ApiTest.Services;
 
-namespace EpicomTest.Controllers
+
+namespace ApiTest.Controllers
 {
     public class SkusController : ApiController
     {
-        private SkuDao db = new SkuDao();
+        private IAbstractService<Sku> service { get; set; }
 
-        // GET: api/Skus
-        public IQueryable<Sku> GetSkus()
+        public SkusController() : base()
         {
-            return db.Skus;
+            this.service = new SkuService();
         }
 
-        // GET: api/Skus/5
-        [ResponseType(typeof(Sku))]
-        public async Task<IHttpActionResult> GetSku(int id)
+        // GET: api/skus
+        [HttpGet]
+        [Route("api/skus")]
+        [ResponseType(typeof(List<Sku>))]
+        public IHttpActionResult List()
         {
-            Sku sku = await db.Skus.FindAsync(id);
+            List<Sku> list = service.List();
+            return Ok(list);
+        }
+
+        // GET: api/skus/5
+        [HttpGet]
+        [Route("api/skus/{id}")]
+        [ResponseType(typeof(Sku))]
+        public IHttpActionResult GetSku(int id)
+        {
+            Sku sku = service.Get(id);
             if (sku == null)
             {
                 return NotFound();
@@ -37,84 +43,65 @@ namespace EpicomTest.Controllers
             return Ok(sku);
         }
 
-        // PUT: api/Skus/5
+        // PUT: api/skus/5
+        [HttpPut]
+        [Route("api/skus/{id}")]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutSku(int id, Sku sku)
+        public IHttpActionResult PutSku(int id, Sku sku)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != sku.SkuId)
+            if (id != sku.Id)
             {
                 return BadRequest();
             }
 
-            db.Entry(sku).State = EntityState.Modified;
-
             try
             {
-                await db.SaveChangesAsync();
+                service.Update(id, sku);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SkuExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                // TODO: Verificar o que acontece
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Skus
+        // POST: api/skus
+        [HttpPost]
         [ResponseType(typeof(Sku))]
-        public async Task<IHttpActionResult> PostSku(Sku sku)
+        public IHttpActionResult PostSku(Sku sku)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Skus.Add(sku);
-            await db.SaveChangesAsync();
+            service.Create(sku);
 
-            return CreatedAtRoute("DefaultApi", new { id = sku.SkuId }, sku);
+            return CreatedAtRoute("DefaultApi", new { id = sku.Id }, sku);
         }
 
-        // DELETE: api/Skus/5
+        // DELETE: api/skus/5
+        [HttpDelete]
+        [Route("api/skus/{id}")]
         [ResponseType(typeof(Sku))]
-        public async Task<IHttpActionResult> DeleteSku(int id)
+        public IHttpActionResult DeleteSku(int id)
         {
-            Sku sku = await db.Skus.FindAsync(id);
+            Sku sku = service.Get(id);
             if (sku == null)
             {
                 return NotFound();
             }
 
-            db.Skus.Remove(sku);
-            await db.SaveChangesAsync();
+            service.Delete(id);
 
             return Ok(sku);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        private bool SkuExists(int id)
-        {
-            return db.Skus.Count(e => e.SkuId == id) > 0;
         }
     }
 }

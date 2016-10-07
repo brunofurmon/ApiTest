@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 
-namespace EpicomTest
+namespace ApiTest
 {
     public static class WebApiConfig
     {
