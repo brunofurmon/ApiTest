@@ -5,7 +5,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ApiTest.Models;
 using ApiTest.Services;
-
+using ApiTest.Dto;
+using ApiTest.Components;
 
 namespace ApiTest.Controllers
 {
@@ -105,6 +106,41 @@ namespace ApiTest.Controllers
             service.Delete(id);
 
             return Ok(sku);
+        }
+
+        [HttpPost]
+        [Route("api/skus/order")]
+        public IHttpActionResult ProcessOrder(OrderForm[] orders)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
+
+            foreach (OrderForm order in orders)
+            {
+                string orderString = order.Tipo;
+                OrderType orderType = GetOrderTypeFromString(orderString);
+
+                //orderService.ProccessOrder(order);
+            }
+
+            return Ok(orders);
+        }
+
+        private OrderType GetOrderTypeFromString(string orderString)
+        {
+            OrderType orderType;
+            switch (orderString)
+            {
+                case Constants.SkuCreationKey:
+                    orderType = OrderType.SkuCreation;
+                    break;
+                default:
+                    orderType = OrderType.Invalid;
+                    break;
+            }
+            return orderType;
         }
     }
 }
