@@ -19,13 +19,13 @@ namespace ApiTest.Services
         T Delete(long id);
     }
 
-    public class AbstractService<T>: IAbstractService<T> where T: AbstractModel
+    public abstract class AbstractService<T>: IAbstractService<T> where T: AbstractModel
     {
-        private IAbstractDao<T> dao { get; set; }
+        private IGenericDao<T> dao { get; set; }
 
         public AbstractService() : base()
         {
-            this.dao = new AbstractDao<T>();
+            this.dao = GenericDao<T>.Instance;
         }
 
         // List

@@ -1,16 +1,20 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data.SqlTypes;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace ApiTest.Models
 {
-    public class AbstractModel
+    public abstract class AbstractModel
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
-        [DefaultValue("getutcdate()")]
-        public SqlDateTime CreationDate { get; set; }
+        [Required]
+        [DefaultValue("GETUTCDATE()")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime CreationDate { get; set; }
     }
 }
