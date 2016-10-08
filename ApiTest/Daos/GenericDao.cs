@@ -68,7 +68,7 @@ namespace ApiTest.Daos
         {
             if (db.Count() == 0)
             {
-                return null;
+                return new List<T>();
             }
             return db.ToList();
         }
