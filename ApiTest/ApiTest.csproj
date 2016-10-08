@@ -115,6 +115,7 @@
     <Compile Include="Controllers\SkusController.cs" />
     <Compile Include="Daos\GenericDao.cs" />
     <Compile Include="Dto\OrderForm.cs" />
+    <Compile Include="Exceptions\OrderException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -123,6 +124,7 @@
     <Compile Include="Daos\SkuDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AbstractService.cs" />
+    <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\SkuService.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -14,7 +14,6 @@ namespace ApiTest.Models
 
         [Required]
         [DataType(DataType.DateTime)]
-        [DefaultValue("GETUTCDATE()")]
         public DateTime CreationDate { get; set; }
     }
 }

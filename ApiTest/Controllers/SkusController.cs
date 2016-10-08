@@ -7,16 +7,20 @@ using ApiTest.Models;
 using ApiTest.Services;
 using ApiTest.Dto;
 using ApiTest.Components;
+using System;
+using EpicomTest.Exceptions;
 
 namespace ApiTest.Controllers
 {
     public class SkusController : ApiController
     {
-        private IAbstractService<Sku> service { get; set; }
+        private IAbstractService<Sku> skuService { get; set; }
+        private IOrderService orderService { get; set; }
 
         public SkusController() : base()
         {
-            this.service = new SkuService();
+            this.skuService = new SkuService();
+            this.orderService = new OrderService();
         }
 
         // GET: api/skus
@@ -25,7 +29,7 @@ namespace ApiTest.Controllers
         [ResponseType(typeof(List<Sku>))]
         public IHttpActionResult List()
         {
-            List<Sku> list = service.List();
+            List<Sku> list = skuService.List();
             return Ok(list);
         }
 
@@ -35,7 +39,7 @@ namespace ApiTest.Controllers
         [ResponseType(typeof(Sku))]
         public IHttpActionResult GetSku(int id)
         {
-            Sku sku = service.Get(id);
+            Sku sku = skuService.Get(id);
             if (sku == null)
             {
                 return NotFound();
@@ -60,7 +64,7 @@ namespace ApiTest.Controllers
             try
             {
                 modifiedSku.Id = id;
-                returnedSku = service.Update(modifiedSku);
+                returnedSku = skuService.Update(modifiedSku);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -86,7 +90,7 @@ namespace ApiTest.Controllers
                 return BadRequest(ModelState);
             }
 
-            service.Create(sku);
+            skuService.Create(sku);
 
             return Created("api", sku);
         }
@@ -97,13 +101,13 @@ namespace ApiTest.Controllers
         [ResponseType(typeof(Sku))]
         public IHttpActionResult DeleteSku(int id)
         {
-            Sku sku = service.Get(id);
+            Sku sku = skuService.Get(id);
             if (sku == null)
             {
                 return NotFound();
             }
 
-            service.Delete(id);
+            skuService.Delete(id);
 
             return Ok(sku);
         }
@@ -119,28 +123,17 @@ namespace ApiTest.Controllers
 
             foreach (OrderForm order in orders)
             {
-                string orderString = order.Tipo;
-                OrderType orderType = GetOrderTypeFromString(orderString);
-
-                //orderService.ProccessOrder(order);
+                try
+                {
+                    orderService.ProcessOrder(order);
+                }
+                catch (OrderException ex)
+                {
+                    throw ex;
+                }
             }
 
             return Ok(orders);
-        }
-
-        private OrderType GetOrderTypeFromString(string orderString)
-        {
-            OrderType orderType;
-            switch (orderString)
-            {
-                case Constants.SkuCreationKey:
-                    orderType = OrderType.SkuCreation;
-                    break;
-                default:
-                    orderType = OrderType.Invalid;
-                    break;
-            }
-            return orderType;
         }
     }
 }

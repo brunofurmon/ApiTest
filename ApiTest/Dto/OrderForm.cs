@@ -14,5 +14,6 @@ namespace ApiTest.Dto
     {
         public long IdProduto { get; set; }
         public long IdSku { get; set; }
+        public decimal Preco { get; set; }
     }
 }

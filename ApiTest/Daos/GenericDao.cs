@@ -1,4 +1,5 @@
 ﻿using ApiTest.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -114,6 +115,10 @@ namespace ApiTest.Daos
         // POST: api/Ts
         public T Create(T bean)
         {
+            // In this obvious case where the API clock is the same as the Database clock,
+            // inserting a time of creation from here won't skew the time between them.
+            bean.CreationDate = DateTime.UtcNow;
+
             db.Add(bean);
             this.SaveChanges();
 
