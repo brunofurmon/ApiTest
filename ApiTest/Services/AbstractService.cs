@@ -14,7 +14,7 @@ namespace ApiTest.Services
         //Create
         T Create(T bean);
         // Update
-        T Update(long id, T bean);
+        T Update(T bean);
         //Delete
         T Delete(long id);
     }
@@ -47,9 +47,9 @@ namespace ApiTest.Services
             return success;
         }
         // Update
-        public T Update(long id, T bean)
+        public T Update(T bean)
         {
-            T success = dao.Update(id, bean);
+            T success = dao.Update(bean);
             return success;
         }
         //Delete

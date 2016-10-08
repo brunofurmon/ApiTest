@@ -54,14 +54,21 @@ namespace ApiTest.Controllers
                 return BadRequest(ModelState);
             }
 
+            Sku modifiedSku = sku;
+            Sku returnedSku;
             try
             {
-                service.Update(id, sku);
+                modifiedSku.Id = id;
+                returnedSku = service.Update(modifiedSku);
             }
             catch (DbUpdateConcurrencyException)
             {
                 // TODO: Verificar o que acontece
                 throw;
+            }
+            if (returnedSku == null)
+            {
+                return NotFound();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
