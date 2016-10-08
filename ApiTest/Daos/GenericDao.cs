@@ -14,7 +14,7 @@ namespace ApiTest.Daos
         /// GET: api/T/5
         T Get(long id);
         /// PUT: api/Ts/5
-        T Update(long id, T bean);
+        T Update(T bean);
         /// POST: api/Ts
         T Create(T bean);
         /// DELETE: api/Ts/5
@@ -85,17 +85,25 @@ namespace ApiTest.Daos
         }
 
         // PUT: api/Ts/5
-        public T Update(long id, T bean)
+        public T Update(T bean)
         {
-            this.Entry(bean).State = EntityState.Modified;
+            // Finds original bean before attaching
+            T originalBean = db.Find(bean.Id);
 
+            if (originalBean == null)
+            {
+                return null;
+            }
+
+            DbEntityEntry<T> entry = Entry(originalBean);
+            entry.CurrentValues.SetValues(bean);
             try
             {
                 this.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (Exists(id))
+                if (Exists(bean.Id))
                 {
                     throw;
                 }
@@ -138,7 +146,8 @@ namespace ApiTest.Daos
 
         private bool Exists(long id)
         {
-            return db.Count(e => e.Id == id) > 0;
+            //return db.Count(e => e.Id == id) > 0;
+            return db.AsNoTracking().Any(e => e.Id == id);
         }
     }
 }

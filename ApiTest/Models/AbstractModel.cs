@@ -13,8 +13,8 @@ namespace ApiTest.Models
         public long Id { get; set; }
 
         [Required]
+        [DataType(DataType.DateTime)]
         [DefaultValue("GETUTCDATE()")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreationDate { get; set; }
     }
 }
