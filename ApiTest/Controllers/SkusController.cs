@@ -54,11 +54,6 @@ namespace ApiTest.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != sku.Id)
-            {
-                return BadRequest();
-            }
-
             try
             {
                 service.Update(id, sku);
@@ -85,7 +80,7 @@ namespace ApiTest.Controllers
 
             service.Create(sku);
 
-            return CreatedAtRoute("DefaultApi", new { id = sku.Id }, sku);
+            return Created("api", sku);
         }
 
         // DELETE: api/skus/5
