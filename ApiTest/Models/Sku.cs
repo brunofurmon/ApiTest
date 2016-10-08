@@ -10,7 +10,9 @@ namespace ApiTest.Models
     public class Sku: AbstractModel
     {
         [Required]
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
+        [Required]
+        public long SkuId { get; set; }
         [Required]
         public decimal Price { get; set; }
     }
