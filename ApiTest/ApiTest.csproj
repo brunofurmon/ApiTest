@@ -111,7 +111,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SkusController.cs" />
-    <Compile Include="Daos\AbstractDao.cs" />
+    <Compile Include="Daos\GenericDao.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

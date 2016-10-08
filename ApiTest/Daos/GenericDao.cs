@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ApiTest.Daos
 {
-    public interface IAbstractDao<T> where T : AbstractModel
+    public interface IGenericDao<T> where T : AbstractModel
     {
         /// GET: api/T
         List<T> List();
@@ -21,12 +21,47 @@ namespace ApiTest.Daos
         T Delete(long id);
     }
 
-    public class AbstractDao<T> : DbContext, IAbstractDao<T> where T : AbstractModel
+    public class GenericDao<T> : DbContext, IGenericDao<T> where T : AbstractModel
     {
-        public AbstractDao() : base("name=ApiTest")
+        public GenericDao() : base("name=ApiTest")
         {
         }
+
+        private static IGenericDao<T> instance { get; set; }
+        private static readonly object padlock = new object();
+
+        public static IGenericDao<T> Instance
+        {
+            get
+            {
+                lock(padlock)
+                {
+                    if (instance == null)
+                    {
+                        instance = new GenericDao<T>();
+                    }
+                    return instance;
+                }
+                
+            }
+            protected set
+            {
+               instance = value;
+            }
+        }
+
         public virtual DbSet<T> db { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<T>().Map(m =>
+            {
+                m.MapInheritedProperties();
+                //m.ToTable(this.GetType().Name);
+            });
+
+            base.OnModelCreating(modelBuilder);
+        }
 
         // GET: api/T
         public List<T> List()

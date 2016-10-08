@@ -3,7 +3,7 @@ using System.Data.Entity;
 
 namespace ApiTest.Daos
 {
-    public class SkuDao : AbstractDao<Sku>
+    public class SkuDao : GenericDao<Sku>
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
@@ -15,7 +15,5 @@ namespace ApiTest.Daos
         public SkuDao() : base()
         {
         }
-
-        //public DbSet<Sku> Skus { get; set; }
     }
 }
