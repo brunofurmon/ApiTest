@@ -3,10 +3,6 @@ using ApiTest.Daos;
 using ApiTest.Dto;
 using ApiTest.Models;
 using EpicomTest.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 
 namespace ApiTest.Services
@@ -39,7 +35,7 @@ namespace ApiTest.Services
 
                 default:
                 case ApiEnums.OrderType.Invalid:
-                    throw new OrderException("Error while trying to process a valid order");
+                    throw new OrderException(string.Format("Error while trying to process an order. Null or Invalid Operation {0}", orderString));
             }
 
             return;
