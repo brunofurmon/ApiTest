@@ -66,9 +66,10 @@ namespace ApiTest.Controllers
                 modifiedSku.Id = id;
                 returnedSku = skuService.Update(modifiedSku);
             }
+            // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
+            // Usually happens when you try to attach an altered entity on the top of an existing one
             catch (DbUpdateConcurrencyException)
             {
-                // TODO: Verificar o que acontece
                 throw;
             }
             if (returnedSku == null)
