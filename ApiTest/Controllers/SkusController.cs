@@ -52,19 +52,19 @@ namespace ApiTest.Controllers
         [HttpPut]
         [Route("api/skus/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSku(int id, Sku sku)
+        public IHttpActionResult PutSku(int id, OrderForm form)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Sku modifiedSku = sku;
+            Sku newSku = Sku.FromOrderForm(form);
             Sku returnedSku;
             try
             {
-                modifiedSku.Id = id;
-                returnedSku = skuService.Update(modifiedSku);
+                newSku.Id = id;
+                returnedSku = skuService.Update(newSku);
             }
             // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
             // Usually happens when you try to attach an altered entity on the top of an existing one
@@ -72,6 +72,7 @@ namespace ApiTest.Controllers
             {
                 throw;
             }
+
             if (returnedSku == null)
             {
                 return NotFound();
@@ -84,16 +85,17 @@ namespace ApiTest.Controllers
         [HttpPost]
         [Route("api/skus")]
         [ResponseType(typeof(Sku))]
-        public IHttpActionResult PostSku(Sku sku)
+        public IHttpActionResult PostSku(OrderForm form)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            skuService.Create(sku);
+            Sku newSku = Sku.FromOrderForm(form);
+            skuService.Create(newSku);
 
-            return Created("api", sku);
+            return Created("api", newSku);
         }
 
         // DELETE: api/skus/5
