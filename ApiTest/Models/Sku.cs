@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
+using static ApiTest.Components.ApiEnums;
 
 
 namespace ApiTest.Models
@@ -10,10 +7,11 @@ namespace ApiTest.Models
     public class Sku: AbstractModel
     {
         [Required]
-        public long ProductId { get; set; }
+        public long IdProduto { get; set; }
         [Required]
-        public long SkuId { get; set; }
+        public long IdSku { get; set; }
         [Required]
-        public decimal Price { get; set; }
+        public decimal Preco { get; set; }
+        public Availability Disponivel { get; set; }
     }
 }

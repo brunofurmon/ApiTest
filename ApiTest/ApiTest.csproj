@@ -111,7 +111,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Components\Constants.cs" />
-    <Compile Include="Components\OrderType.cs" />
+    <Compile Include="Components\ApiEnums.cs" />
     <Compile Include="Controllers\SkusController.cs" />
     <Compile Include="Daos\GenericDao.cs" />
     <Compile Include="Dto\OrderForm.cs" />

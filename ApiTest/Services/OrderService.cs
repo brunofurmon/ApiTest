@@ -28,33 +28,33 @@ namespace ApiTest.Services
         public void ProcessOrder(OrderForm order)
         {
             string orderString = order.Tipo;
-            OrderType orderType = GetOrderTypeFromString(orderString);
+            ApiEnums.OrderType orderType = GetOrderTypeFromString(orderString);
 
             switch (orderType)
             {
-                case OrderType.SkuCreation:
+                case ApiEnums.OrderType.SkuCreation:
                     Sku newSku = CreateSkuFromOrder(order);
                     skuDao.Create(newSku);
                     break;
 
                 default:
-                case OrderType.Invalid:
+                case ApiEnums.OrderType.Invalid:
                     throw new OrderException("Error while trying to process a valid order");
             }
 
             return;
         }
 
-        private OrderType GetOrderTypeFromString(string orderString)
+        private ApiEnums.OrderType GetOrderTypeFromString(string orderString)
         {
-            OrderType orderType;
+            ApiEnums.OrderType orderType;
             switch (orderString)
             {
                 case Constants.SkuCreationKey:
-                    orderType = OrderType.SkuCreation;
+                    orderType = ApiEnums.OrderType.SkuCreation;
                     break;
                 default:
-                    orderType = OrderType.Invalid;
+                    orderType = ApiEnums.OrderType.Invalid;
                     break;
             }
             return orderType;
@@ -64,9 +64,9 @@ namespace ApiTest.Services
         {
             Sku createdSku = new Sku
             {
-                ProductId = form.Parametros.IdProduto,
-                SkuId = form.Parametros.IdSku,
-                Price = form.Parametros.Preco
+                IdProduto = form.Parametros.IdProduto,
+                IdSku = form.Parametros.IdSku,
+                Preco = form.Parametros.Preco
             };
 
             return createdSku;
