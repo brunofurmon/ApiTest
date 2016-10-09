@@ -12,6 +12,7 @@ using EpicomTest.Exceptions;
 
 namespace ApiTest.Controllers
 {
+    [RoutePrefix("api/skus")]
     public class SkusController : ApiController
     {
         private IAbstractService<Sku> skuService { get; set; }
@@ -25,7 +26,7 @@ namespace ApiTest.Controllers
 
         // GET: api/skus
         [HttpGet]
-        [Route("api/skus")]
+        [Route("")]
         [ResponseType(typeof(List<Sku>))]
         public IHttpActionResult List()
         {
@@ -35,7 +36,7 @@ namespace ApiTest.Controllers
 
         // GET: api/skus/5
         [HttpGet]
-        [Route("api/skus/{id}")]
+        [Route("{id}")]
         [ResponseType(typeof(Sku))]
         public IHttpActionResult GetSku(int id)
         {
@@ -50,7 +51,7 @@ namespace ApiTest.Controllers
 
         // PUT: api/skus/5
         [HttpPut]
-        [Route("api/skus/{id}")]
+        [Route("{id}")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutSku(int id, SkuForm form)
         {
@@ -83,7 +84,7 @@ namespace ApiTest.Controllers
 
         // POST: api/skus
         [HttpPost]
-        [Route("api/skus")]
+        [Route("")]
         [ResponseType(typeof(Sku))]
         public IHttpActionResult PostSku(SkuForm form)
         {
@@ -100,7 +101,7 @@ namespace ApiTest.Controllers
 
         // DELETE: api/skus/5
         [HttpDelete]
-        [Route("api/skus/{id}")]
+        [Route("{id}")]
         [ResponseType(typeof(Sku))]
         public IHttpActionResult DeleteSku(int id)
         {
@@ -116,7 +117,7 @@ namespace ApiTest.Controllers
         }
 
         [HttpPost]
-        [Route("api/skus/order")]
+        [Route("order")]
         public IHttpActionResult ProcessOrder(OrderForm[] orders)
         {
             if (ModelState.IsValid == false)
