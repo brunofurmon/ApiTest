@@ -58,13 +58,11 @@ namespace ApiTest.Daos
             modelBuilder.Entity<T>().Map(m =>
             {
                 m.MapInheritedProperties();
-                //m.ToTable(this.GetType().Name);
             });
 
             base.OnModelCreating(modelBuilder);
         }
 
-        // GET: api/T
         public List<T> List()
         {
             if (db.Count() == 0)
@@ -74,7 +72,6 @@ namespace ApiTest.Daos
             return db.ToList();
         }
 
-        // GET: api/T/5
         public T Get(long id)
         {
             T bean = db.Find(id);
@@ -85,7 +82,6 @@ namespace ApiTest.Daos
             return null;
         }
 
-        // PUT: api/Ts/5
         public T Update(T bean)
         {
             // Finds original bean before attaching
@@ -112,7 +108,6 @@ namespace ApiTest.Daos
             return bean;
         }
 
-        // POST: api/Ts
         public T Create(T bean)
         {
             // In this obvious case where the API clock is the same as the Database clock,
@@ -125,7 +120,6 @@ namespace ApiTest.Daos
             return bean;
         }
 
-        // DELETE: api/Ts/5
         public T Delete(long id)
         {
             T bean = db.Find(id);
@@ -151,7 +145,6 @@ namespace ApiTest.Daos
 
         private bool Exists(long id)
         {
-            //return db.Count(e => e.Id == id) > 0;
             return db.AsNoTracking().Any(e => e.Id == id);
         }
     }
