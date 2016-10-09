@@ -52,14 +52,14 @@ namespace ApiTest.Controllers
         [HttpPut]
         [Route("api/skus/{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSku(int id, OrderForm form)
+        public IHttpActionResult PutSku(int id, SkuForm form)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Sku newSku = Sku.FromOrderForm(form);
+            Sku newSku = Sku.FromForm(form);
             Sku returnedSku;
             try
             {
@@ -85,14 +85,14 @@ namespace ApiTest.Controllers
         [HttpPost]
         [Route("api/skus")]
         [ResponseType(typeof(Sku))]
-        public IHttpActionResult PostSku(OrderForm form)
+        public IHttpActionResult PostSku(SkuForm form)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Sku newSku = Sku.FromOrderForm(form);
+            Sku newSku = Sku.FromForm(form);
             skuService.Create(newSku);
 
             return Created("api", newSku);

@@ -15,14 +15,14 @@ namespace ApiTest.Models
         public decimal Preco { get; set; }
         public Availability Disponivel { get; set; }
 
-        public static Sku FromOrderForm(OrderForm form)
+        public static Sku FromForm(SkuForm form)
         {
             Sku createdSku = new Sku
             {
-                IdProduto = form.Parametros.IdProduto,
-                IdSku = form.Parametros.IdSku,
-                Preco = form.Parametros.Preco,
-                Disponivel = form.Parametros.Disponivel
+                IdProduto = form.IdProduto,
+                IdSku = form.IdSku,
+                Preco = form.Preco,
+                Disponivel = form.Disponivel
             };
 
             return createdSku;
