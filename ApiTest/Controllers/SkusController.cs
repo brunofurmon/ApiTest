@@ -52,19 +52,18 @@ namespace ApiTest.Controllers
         [HttpPatch]
         [Route("{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSku(int id, SkuForm form)
+        public IHttpActionResult PutSku(int id, Sku alteredSku)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Sku newSku = Sku.FromForm(form);
             Sku returnedSku;
             try
             {
-                newSku.Id = id;
-                returnedSku = skuService.Update(newSku);
+                alteredSku.Id = id;
+                returnedSku = skuService.Update(alteredSku);
             }
             // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
             // Usually happens when you try to attach an altered entity on the top of an existing one
