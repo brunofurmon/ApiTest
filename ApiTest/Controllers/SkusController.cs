@@ -6,9 +6,8 @@ using System.Web.Http.Description;
 using ApiTest.Models;
 using ApiTest.Services;
 using ApiTest.Dto;
-using ApiTest.Components;
-using System;
-using EpicomTest.Exceptions;
+using ApiTest.Exceptions;
+
 
 namespace ApiTest.Controllers
 {
@@ -49,8 +48,8 @@ namespace ApiTest.Controllers
             return Ok(sku);
         }
 
-        // PUT: api/skus/5
-        [HttpPut]
+        // PATCH: api/skus/5
+        [HttpPatch]
         [Route("{id}")]
         [ResponseType(typeof(void))]
         public IHttpActionResult PutSku(int id, SkuForm form)
@@ -86,17 +85,16 @@ namespace ApiTest.Controllers
         [HttpPost]
         [Route("")]
         [ResponseType(typeof(Sku))]
-        public IHttpActionResult PostSku(SkuForm form)
+        public IHttpActionResult PostSku(Sku sku)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            Sku newSku = Sku.FromForm(form);
-            skuService.Create(newSku);
+            skuService.Create(sku);
 
-            return Created("api", newSku);
+            return Created("api", sku);
         }
 
         // DELETE: api/skus/5

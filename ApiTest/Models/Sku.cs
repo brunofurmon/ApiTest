@@ -1,28 +1,31 @@
 ﻿using ApiTest.Dto;
-using System.ComponentModel.DataAnnotations;
-using static ApiTest.Components.ApiEnums;
-
 
 namespace ApiTest.Models
 {
-    public class Sku: AbstractModel
+    public class Sku : AbstractModel
     {
-        [Required]
-        public long IdProduto { get; set; }
-        [Required]
-        public long IdSku { get; set; }
-        [Required]
-        public decimal Preco { get; set; }
-        public Availability Disponivel { get; set; }
+        public string Nome { get; set; }
+        public string NomeReduzido { get; set; }
+        public string Codigo { get; set; }
+        public string Modelo { get; set; }
+        public string Ean { get; set; }
+        public string Url { get; set; }
+        public bool ForaDeLinha { get; set; }
+        public int Estoque { get; set; }
+        public Dimensoes Dimensoes { get; set; }
+        public Imagem[] Imagens { get; set; }
+        public Grupo[] Grupos { get; set; }
+        public SkuMarketplaceGetResponse[] Marketplaces { get; set; }
+        public string CodigoProduto { get; set; }
 
         public static Sku FromForm(SkuForm form)
         {
             Sku createdSku = new Sku
             {
-                IdProduto = form.IdProduto,
-                IdSku = form.IdSku,
-                Preco = form.Preco,
-                Disponivel = form.Disponivel
+                //IdProduto = form.IdProduto,
+                //IdSku = form.IdSku,
+                //Preco = form.Preco,
+                //Disponivel = form.Disponivel
             };
 
             return createdSku;

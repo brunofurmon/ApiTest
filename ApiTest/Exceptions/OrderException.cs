@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace EpicomTest.Exceptions
+namespace ApiTest.Exceptions
 {
     public class OrderException: Exception
     {

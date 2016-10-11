@@ -1,5 +1,4 @@
 ﻿using ApiTest.Models;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -13,42 +12,19 @@ namespace ApiTest.Daos
         /// GET: api/T
         List<T> List();
         /// GET: api/T/5
-        T Get(long id);
+        T Get(int id);
         /// PUT: api/Ts/5
         T Update(T bean);
         /// POST: api/Ts
         T Create(T bean);
         /// DELETE: api/Ts/5
-        T Delete(long id);
+        T Delete(int id);
     }
 
     public class GenericDao<T> : DbContext, IGenericDao<T> where T : AbstractModel
     {
         public GenericDao() : base("name=ApiTest")
         {
-        }
-
-        private static IGenericDao<T> instance { get; set; }
-        private static readonly object padlock = new object();
-
-        public static IGenericDao<T> Instance
-        {
-            get
-            {
-                lock(padlock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new GenericDao<T>();
-                    }
-                    return instance;
-                }
-                
-            }
-            protected set
-            {
-               instance = value;
-            }
         }
 
         public virtual DbSet<T> db { get; set; }
@@ -72,7 +48,7 @@ namespace ApiTest.Daos
             return db.ToList();
         }
 
-        public T Get(long id)
+        public T Get(int id)
         {
             T bean = db.Find(id);
             if (bean != null)
@@ -110,17 +86,13 @@ namespace ApiTest.Daos
 
         public T Create(T bean)
         {
-            // In this obvious case where the API clock is the same as the Database clock,
-            // inserting a time of creation from here won't skew the time between them.
-            bean.CreationDate = DateTime.UtcNow;
-
             db.Add(bean);
             this.SaveChanges();
 
             return bean;
         }
 
-        public T Delete(long id)
+        public T Delete(int id)
         {
             T bean = db.Find(id);
             if (bean == null)
@@ -132,15 +104,6 @@ namespace ApiTest.Daos
             this.SaveChanges();
 
             return bean;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Dispose();
-            }
-            base.Dispose(disposing);
         }
 
         private bool Exists(long id)

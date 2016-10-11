@@ -2,7 +2,7 @@
 using ApiTest.Daos;
 using ApiTest.Dto;
 using ApiTest.Models;
-using EpicomTest.Exceptions;
+using ApiTest.Exceptions;
 
 
 namespace ApiTest.Services

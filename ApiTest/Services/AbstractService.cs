@@ -10,13 +10,13 @@ namespace ApiTest.Services
         // List
         List<T> List();
         //Get id
-        T Get(long id);
+        T Get(int id);
         //Create
         T Create(T bean);
         // Update
         T Update(T bean);
         //Delete
-        T Delete(long id);
+        T Delete(int id);
     }
 
     public abstract class AbstractService<T>: IAbstractService<T> where T: AbstractModel
@@ -25,37 +25,57 @@ namespace ApiTest.Services
 
         public AbstractService() : base()
         {
-            this.dao = GenericDao<T>.Instance;
         }
 
         // List
         public List<T> List()
         {
-            List<T> beans = dao.List();
+            List<T> beans;
+            using (GenericDao<T> dao = new GenericDao<T>())
+            {
+                beans = dao.List();
+            }
+                
             return beans;
         }
         //Get id
-        public T Get(long id)
+        public T Get(int id)
         {
-            T bean = dao.Get(id);
+            T bean;
+            using (GenericDao<T> dao = new GenericDao<T>())
+            {
+                bean = dao.Get(id);
+            }
             return bean;
         }
         //Create
         public T Create(T bean)
         {
-            T success = dao.Create(bean);
+            T success;
+            using (GenericDao<T> dao = new GenericDao<T>())
+            {
+                success = dao.Create(bean);
+            }
             return success;
         }
         // Update
         public T Update(T bean)
         {
-            T success = dao.Update(bean);
+            T success;
+            using (GenericDao<T> dao = new GenericDao<T>())
+            {
+                success = dao.Update(bean);
+            }
             return success;
         }
         //Delete
-        public T Delete(long id)
+        public T Delete(int id)
         {
-            T success = dao.Delete(id);
+            T success;
+            using (GenericDao<T> dao = new GenericDao<T>())
+            {
+                success = dao.Delete(id);
+            }
             return success;
         }
     }
