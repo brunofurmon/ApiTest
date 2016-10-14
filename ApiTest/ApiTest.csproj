@@ -122,6 +122,7 @@
     <Compile Include="Models\AbstractModel.cs" />
     <Compile Include="Models\AtributoDoGrupo.cs" />
     <Compile Include="Models\Dimensoes.cs" />
+    <Compile Include="Models\Disponibilidade.cs" />
     <Compile Include="Models\Grupo.cs" />
     <Compile Include="Models\Imagem.cs" />
     <Compile Include="Models\Sku.cs" />
