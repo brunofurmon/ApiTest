@@ -15,11 +15,13 @@ namespace ApiTest.Controllers
     public class SkusController : ApiController
     {
         private IAbstractService<Sku> skuService { get; set; }
+        private IAbstractService<Disponibilidade> dispService { get; set; }
         private IOrderService orderService { get; set; }
 
         public SkusController() : base()
         {
             this.skuService = new SkuService();
+            this.dispService = new DisponibilidadeService();
             this.orderService = new OrderService();
         }
 
@@ -53,7 +55,7 @@ namespace ApiTest.Controllers
         [HttpPatch]
         [Route("{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult UpdateSku(int id, Sku alteredSku)
+        public IHttpActionResult UpdateSku(int id, Sku sku)
         {
             if (!ModelState.IsValid)
             {
@@ -61,9 +63,10 @@ namespace ApiTest.Controllers
             }
 
             Sku returnedSku;
+            Sku alteredSku = sku;
             try
             {
-                alteredSku.SkuId = id;
+                alteredSku.Id = id;
                 returnedSku = skuService.Update(alteredSku);
             }
             // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
@@ -111,7 +114,7 @@ namespace ApiTest.Controllers
 
             skuService.Delete(id);
 
-            return Ok(sku);
+            return Ok();
         }
         #endregion Skus
 
@@ -136,7 +139,19 @@ namespace ApiTest.Controllers
         [Route("{skuId}/disponibilidades/{dispId}")]
         public IHttpActionResult GetDispobilidade(int skuId, int dispId)
         {
-            return null;
+            Sku sku = skuService.Get(skuId);
+            if (sku == null)
+            {
+                return NotFound();
+            }
+
+            Disponibilidade disp = dispService.Get(dispId);
+            if (disp == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(disp);
         }
 
         // Delete
@@ -145,23 +160,81 @@ namespace ApiTest.Controllers
         [ResponseType(typeof(Sku))]
         public IHttpActionResult DeleteDisponibilidade(int skuId, int dispId)
         {
-            return null;
+            Sku sku = skuService.Get(skuId);
+            if (sku == null)
+            {
+                return NotFound();
+            }
+
+            Disponibilidade disp = dispService.Get(dispId);
+            if (disp == null)
+            {
+                return NotFound();
+            }
+
+            dispService.Delete(disp.Id);
+
+            return Ok();
         }
 
         // Post skuId/disponibilidades
         [HttpPost]
         [Route("{skuId}/disponibilidades")]
-        public IHttpActionResult CreateDisponibilidade(int skuId)
+        public IHttpActionResult CreateDisponibilidade(int skuId, Disponibilidade disp)
         {
-            return null;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Sku sku = skuService.Get(skuId);
+            if (sku == null)
+            {
+                return NotFound();
+            }
+            sku.Disponibilidades.Add(disp);
+
+            skuService.Update(sku);
+
+            return Ok(sku);
         }
 
         // Patch skuId/disponibilidades
         [HttpPatch]
         [Route("{skuId}/disponibilidades/{dispId}")]
-        public IHttpActionResult UpdateDisponibilidade(int skuId, int dispId)
+        public IHttpActionResult UpdateDisponibilidade(int skuId, int dispId, Disponibilidade disp)
         {
-            return null;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            Sku sku = skuService.Get(skuId);
+            if (sku == null)
+            {
+                return NotFound();
+            }
+
+            Disponibilidade returnedDisp;
+            Disponibilidade alteredDisp = disp;
+            try
+            {
+                alteredDisp.Id = dispId;
+                returnedDisp = dispService.Update(alteredDisp);
+            }
+            // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
+            // Usually happens when you try to attach an altered entity on the top of an existing one
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            if (returnedDisp == null)
+            {
+                return NotFound();
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
         }
         #endregion Disponibilidades
 

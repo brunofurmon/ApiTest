@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace ApiTest.Models
 {
-    [ComplexType]
-    public class Imagem
+    public class Imagem: IAbstractModel
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string Menor { get; set; }
         public string Maior { get; set; }
         public string Zoom { get; set; }

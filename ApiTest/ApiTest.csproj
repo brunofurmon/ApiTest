@@ -130,6 +130,7 @@
     <Compile Include="Models\SkuMarketplaceGetResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AbstractService.cs" />
+    <Compile Include="Services\DisponibilidadeService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\SkuService.cs" />
   </ItemGroup>

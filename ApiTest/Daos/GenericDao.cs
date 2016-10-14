@@ -3,12 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace ApiTest.Daos
 {
-    public interface IGenericDao<T> where T : class
+    public interface IGenericDao<T> where T : class, IAbstractModel
     {
         /// GET: api/T
         List<T> List();
@@ -24,7 +25,7 @@ namespace ApiTest.Daos
         T Delete(int id);
     }
 
-    public class GenericDao<T> : DbContext, IGenericDao<T> where T : class
+    public class GenericDao<T> : DbContext, IGenericDao<T> where T : class, IAbstractModel
     {
         public GenericDao() : base("name=ApiTest")
         {
@@ -47,6 +48,9 @@ namespace ApiTest.Daos
             modelBuilder.Entity<Disponibilidade>()
                     .HasRequired<Sku>(s => s.Sku)
                     .WithMany(s => s.Disponibilidades);
+
+            // Does not try to pluralize portuguese names in english (was generating "Grupoes, Imagems, AtributoDoGrupoes" and stuff like that...)
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
             base.OnModelCreating(modelBuilder);
         }
@@ -83,7 +87,7 @@ namespace ApiTest.Daos
         public virtual T Update(T bean)
         {
             // Finds original bean before attaching
-            T originalBean = db.Find(bean);
+            T originalBean = db.Find(bean.Id);
 
             if (originalBean == null)
             {
@@ -98,7 +102,7 @@ namespace ApiTest.Daos
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (Exists(bean))
+                if (Exists(bean.Id))
                 {
                     throw;
                 }
@@ -128,9 +132,9 @@ namespace ApiTest.Daos
             return bean;
         }
 
-        private bool Exists(T bean)
+        private bool Exists(int id)
         {
-            return db.AsNoTracking().Any(b => b == bean);
+            return db.AsNoTracking().Any(b => b.Id == id);
         }
     }
 }

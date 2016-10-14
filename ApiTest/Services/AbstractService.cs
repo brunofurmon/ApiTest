@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ApiTest.Services
 {
-    public interface IAbstractService<T>
+    public interface IAbstractService<T> where T: class, IAbstractModel
     {
         // List
         List<T> List();
@@ -19,7 +19,7 @@ namespace ApiTest.Services
         T Delete(int id);
     }
 
-    public abstract class AbstractService<T>: IAbstractService<T> where T: class
+    public abstract class AbstractService<T>: IAbstractService<T> where T: class, IAbstractModel
     {
         private IGenericDao<T> dao { get; set; }
 

@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace ApiTest.Models
 {
-    public class Sku
+    public class Sku: IAbstractModel
     {
-        public int SkuId { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string Nome { get; set; }
         public string NomeReduzido { get; set; }
         public string Codigo { get; set; }
@@ -22,12 +26,12 @@ namespace ApiTest.Models
         public string CodigoProduto { get; set; }
 
         // Initializes enumerable properties
-        public Sku()
-        {
-            Imagens = new List<Imagem>();
-            Grupos = new List<Grupo>();
-            Marketplaces = new List<SkuMarketplaceGetResponse>();
-            Disponibilidades = new List<Disponibilidade>();
-        }
+        //public Sku()
+        //{
+        //    Imagens = new List<Imagem>();
+        //    Grupos = new List<Grupo>();
+        //    Marketplaces = new List<SkuMarketplaceGetResponse>();
+        //    Disponibilidades = new List<Disponibilidade>();
+        //}
     }
 }
