@@ -113,6 +113,52 @@ namespace ApiTest.Controllers
             return Ok(sku);
         }
 
+        #region Disponibilidades
+        // Get skuId/disponibilidades
+        [HttpGet]
+        [Route("{skuId}/disponibilidades")]
+        [ResponseType(typeof(List<Disponibilidade>))]
+        public IHttpActionResult GetDispobilidades(int skuId)
+        {
+            //List<Disponibilidade> list = skuService.GetDisponibilidades(skuId);
+            //return Ok(list);
+            return null;
+        }
+
+        // Get skuId/disponibilidades/dispId
+        [HttpGet]
+        [Route("{skuId}/disponibilidades/{dispId}")]
+        public IHttpActionResult GetDispobilidade(int skuId, int dispId)
+        {
+            return null;
+        }
+
+        // Delete
+        [HttpDelete]
+        [Route("{skuId}/disponibilidades/{dispId}")]
+        [ResponseType(typeof(Sku))]
+        public IHttpActionResult DeleteDisponibilidade(int skuId, int dispId)
+        {
+            return null;
+        }
+
+        // Post skuId/disponibilidades
+        [HttpPost]
+        [Route("{skuId}/disponibilidades")]
+        public IHttpActionResult CreateDisponibilidade(int skuId)
+        {
+            return null;
+        }
+
+        // Patch skuId/disponibilidades
+        [HttpPatch]
+        [Route("{skuId}/disponibilidades/{dispId}")]
+        public IHttpActionResult UpdateDisponibilidade(int skuId, int dispId)
+        {
+            return null;
+        }
+        #endregion Disponibilidades
+
         [HttpPost]
         [Route("order")]
         public IHttpActionResult ProcessOrder(OrderForm[] orders)
