@@ -19,7 +19,7 @@ namespace ApiTest.Services
         T Delete(int id);
     }
 
-    public abstract class AbstractService<T>: IAbstractService<T> where T: AbstractModel
+    public abstract class AbstractService<T>: IAbstractService<T> where T: class
     {
         private IGenericDao<T> dao { get; set; }
 
@@ -38,6 +38,7 @@ namespace ApiTest.Services
                 
             return beans;
         }
+
         //Get id
         public T Get(int id)
         {

@@ -1,6 +1,7 @@
 ﻿using ApiTest.Models;
 using System.Data.Entity;
 
+
 namespace ApiTest.Daos
 {
     public class SkuDao : GenericDao<Sku>

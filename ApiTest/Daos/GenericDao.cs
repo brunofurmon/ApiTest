@@ -1,18 +1,21 @@
 ﻿using ApiTest.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-
+using System.Linq.Expressions;
 
 namespace ApiTest.Daos
 {
-    public interface IGenericDao<T> where T : AbstractModel
+    public interface IGenericDao<T> where T : class
     {
         /// GET: api/T
         List<T> List();
         /// GET: api/T/5
-        T Get(int id);
+        T Get(int bean);
+        /// Search
+        List<T> SearchFor(Expression<Func<T, bool>> predicate);
         /// PUT: api/Ts/5
         T Update(T bean);
         /// POST: api/Ts
@@ -21,25 +24,34 @@ namespace ApiTest.Daos
         T Delete(int id);
     }
 
-    public class GenericDao<T> : DbContext, IGenericDao<T> where T : AbstractModel
+    public class GenericDao<T> : DbContext, IGenericDao<T> where T : class
     {
         public GenericDao() : base("name=ApiTest")
         {
+            // Solves problem while trying to Serialize empty Disponibilidades List
+            Configuration.LazyLoadingEnabled = false;
+            Configuration.ProxyCreationEnabled = false;
         }
 
         public virtual DbSet<T> db { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            // Maps inherited properties from models
             modelBuilder.Entity<T>().Map(m =>
             {
                 m.MapInheritedProperties();
             });
 
+            // One Sku to Many Disponibilidades
+            modelBuilder.Entity<Disponibilidade>()
+                    .HasRequired<Sku>(s => s.Sku)
+                    .WithMany(s => s.Disponibilidades);
+
             base.OnModelCreating(modelBuilder);
         }
 
-        public List<T> List()
+        public virtual List<T> List()
         {
             if (db.Count() == 0)
             {
@@ -48,7 +60,7 @@ namespace ApiTest.Daos
             return db.ToList();
         }
 
-        public T Get(int id)
+        public virtual T Get(int id)
         {
             T bean = db.Find(id);
             if (bean != null)
@@ -57,11 +69,21 @@ namespace ApiTest.Daos
             }
             return null;
         }
+        /// <summary>
+        /// /////////////////////
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public List<T> SearchFor(Expression<Func<T, bool>> predicate)
+        {
+            IQueryable<T> bean = db.Where(predicate);
+            return (bean == null)? null: bean.ToList();
+        }
 
-        public T Update(T bean)
+        public virtual T Update(T bean)
         {
             // Finds original bean before attaching
-            T originalBean = db.Find(bean.Id);
+            T originalBean = db.Find(bean);
 
             if (originalBean == null)
             {
@@ -76,7 +98,7 @@ namespace ApiTest.Daos
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (Exists(bean.Id))
+                if (Exists(bean))
                 {
                     throw;
                 }
@@ -84,7 +106,7 @@ namespace ApiTest.Daos
             return bean;
         }
 
-        public T Create(T bean)
+        public virtual T Create(T bean)
         {
             db.Add(bean);
             this.SaveChanges();
@@ -106,9 +128,9 @@ namespace ApiTest.Daos
             return bean;
         }
 
-        private bool Exists(long id)
+        private bool Exists(T bean)
         {
-            return db.AsNoTracking().Any(e => e.Id == id);
+            return db.AsNoTracking().Any(b => b == bean);
         }
     }
 }

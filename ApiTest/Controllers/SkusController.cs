@@ -23,6 +23,7 @@ namespace ApiTest.Controllers
             this.orderService = new OrderService();
         }
 
+        #region Skus
         // GET: api/skus
         [HttpGet]
         [Route("")]
@@ -52,7 +53,7 @@ namespace ApiTest.Controllers
         [HttpPatch]
         [Route("{id}")]
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSku(int id, Sku alteredSku)
+        public IHttpActionResult UpdateSku(int id, Sku alteredSku)
         {
             if (!ModelState.IsValid)
             {
@@ -62,7 +63,7 @@ namespace ApiTest.Controllers
             Sku returnedSku;
             try
             {
-                alteredSku.Id = id;
+                alteredSku.SkuId = id;
                 returnedSku = skuService.Update(alteredSku);
             }
             // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
@@ -112,6 +113,7 @@ namespace ApiTest.Controllers
 
             return Ok(sku);
         }
+        #endregion Skus
 
         #region Disponibilidades
         // Get skuId/disponibilidades
@@ -120,9 +122,13 @@ namespace ApiTest.Controllers
         [ResponseType(typeof(List<Disponibilidade>))]
         public IHttpActionResult GetDispobilidades(int skuId)
         {
-            //List<Disponibilidade> list = skuService.GetDisponibilidades(skuId);
-            //return Ok(list);
-            return null;
+            Sku sku = skuService.Get(skuId);
+            if (sku == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(sku.Disponibilidades);
         }
 
         // Get skuId/disponibilidades/dispId
