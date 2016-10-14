@@ -29,7 +29,8 @@ namespace ApiTest.Services
             switch (orderType)
             {
                 case ApiEnums.OrderType.SkuCreation:
-                    Sku newSku = Sku.FromForm(order.Parametros);
+                    //Sku newSku = Sku.FromForm(order.Parametros);
+                    Sku newSku = new Sku();
                     skuDao.Create(newSku);
                     break;
 

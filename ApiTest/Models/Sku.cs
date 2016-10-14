@@ -17,18 +17,5 @@ namespace ApiTest.Models
         public Grupo[] Grupos { get; set; }
         public SkuMarketplaceGetResponse[] Marketplaces { get; set; }
         public string CodigoProduto { get; set; }
-
-        public static Sku FromForm(SkuForm form)
-        {
-            Sku createdSku = new Sku
-            {
-                //IdProduto = form.IdProduto,
-                //IdSku = form.IdSku,
-                //Preco = form.Preco,
-                //Disponivel = form.Disponivel
-            };
-
-            return createdSku;
-        }
     }
 }
