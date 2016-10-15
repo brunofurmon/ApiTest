@@ -1,7 +1,8 @@
 ﻿using ApiTest.Daos;
 using ApiTest.Models;
+using System;
 using System.Collections.Generic;
-
+using System.Linq.Expressions;
 
 namespace ApiTest.Services
 {
@@ -17,11 +18,12 @@ namespace ApiTest.Services
         T Update(T bean);
         //Delete
         T Delete(int id);
+        List<T> Search(Expression<Func<T, bool>> predicate);
     }
 
     public abstract class AbstractService<T>: IAbstractService<T> where T: class, IAbstractModel
     {
-        private IGenericDao<T> dao { get; set; }
+        protected virtual IGenericDao<T> dao { get; set; }
 
         public AbstractService() : base()
         {
@@ -31,7 +33,7 @@ namespace ApiTest.Services
         public List<T> List()
         {
             List<T> beans;
-            using (GenericDao<T> dao = new GenericDao<T>())
+            using (AbstractDao<T> dao = new GenericDao<T>())
             {
                 beans = dao.List();
             }
@@ -43,7 +45,7 @@ namespace ApiTest.Services
         public T Get(int id)
         {
             T bean;
-            using (GenericDao<T> dao = new GenericDao<T>())
+            using (AbstractDao<T> dao = new GenericDao<T>())
             {
                 bean = dao.Get(id);
             }
@@ -53,7 +55,7 @@ namespace ApiTest.Services
         public T Create(T bean)
         {
             T success;
-            using (GenericDao<T> dao = new GenericDao<T>())
+            using (AbstractDao<T> dao = new GenericDao<T>())
             {
                 success = dao.Create(bean);
             }
@@ -63,7 +65,7 @@ namespace ApiTest.Services
         public T Update(T bean)
         {
             T success;
-            using (GenericDao<T> dao = new GenericDao<T>())
+            using (AbstractDao<T> dao = new GenericDao<T>())
             {
                 success = dao.Update(bean);
             }
@@ -73,11 +75,23 @@ namespace ApiTest.Services
         public T Delete(int id)
         {
             T success;
-            using (GenericDao<T> dao = new GenericDao<T>())
+            using (AbstractDao<T> dao = new GenericDao<T>())
             {
                 success = dao.Delete(id);
             }
             return success;
         }
+
+        List<T> Search(Expression<Func<T, bool>> predicate)
+        {
+            List<T> beans;
+            using (AbstractDao<T> dao = new GenericDao<T>())
+            {
+                beans = dao.SearchFor(predicate);
+            }
+
+            return beans;
+        }
+
     }
 }

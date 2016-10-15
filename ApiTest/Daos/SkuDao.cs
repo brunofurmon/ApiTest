@@ -4,7 +4,7 @@ using System.Data.Entity;
 
 namespace ApiTest.Daos
 {
-    public class SkuDao : GenericDao<Sku>
+    public class SkuDao : AbstractDao<Sku>
     {
         // You can add custom code to this file. Changes will not be overwritten.
         // 
