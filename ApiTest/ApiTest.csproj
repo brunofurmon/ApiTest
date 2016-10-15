@@ -112,6 +112,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Components\Constants.cs" />
     <Compile Include="Components\ApiEnums.cs" />
+    <Compile Include="Controllers\DisponibilidadesController.cs" />
     <Compile Include="Controllers\SkusController.cs" />
     <Compile Include="Daos\AbstractDao.cs" />
     <Compile Include="Daos\GenericDao.cs" />

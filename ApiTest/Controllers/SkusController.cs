@@ -5,8 +5,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using ApiTest.Models;
 using ApiTest.Services;
-using ApiTest.Dto;
-using ApiTest.Exceptions;
 
 
 namespace ApiTest.Controllers
@@ -90,7 +88,7 @@ namespace ApiTest.Controllers
                 return NotFound();
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(HttpStatusCode.NoContent);
         }
 
         // POST: api/skus
@@ -123,156 +121,33 @@ namespace ApiTest.Controllers
 
             skuService.Delete(id);
 
-            return Ok();
+            return Ok(HttpStatusCode.NoContent);
         }
         #endregion Skus
 
-        #region Disponibilidades
-        // Get skuId/disponibilidades
-        [HttpGet]
-        [Route("{skuId}/disponibilidades")]
-        [ResponseType(typeof(List<Disponibilidade>))]
-        public IHttpActionResult GetDispobilidades(int skuId)
-        {
-            Sku sku = skuService.Get(skuId);
-            if (sku == null)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[Route("order")]
+        //public IHttpActionResult ProcessOrder(OrderForm[] orders)
+        //{
+        //    if (ModelState.IsValid == false)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            return Ok(sku.Disponibilidades);
-        }
+        //    foreach (OrderForm order in orders)
+        //    {
+        //        try
+        //        {
+        //            orderService.ProcessOrder(order);
+        //        }
+        //        catch (OrderException ex)
+        //        {
+        //            throw ex;
+        //        }
+        //    }
 
-        // Get skuId/disponibilidades/dispId
-        [HttpGet]
-        [Route("{skuId}/disponibilidades/{dispId}")]
-        public IHttpActionResult GetDispobilidade(int skuId, int dispId)
-        {
-            Sku sku = skuService.Get(skuId);
-            if (sku == null)
-            {
-                return NotFound();
-            }
-
-            Disponibilidade disp = dispService.Get(dispId);
-            if (disp == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(disp);
-        }
-
-        // Delete
-        [HttpDelete]
-        [Route("{skuId}/disponibilidades/{dispId}")]
-        [ResponseType(typeof(Sku))]
-        public IHttpActionResult DeleteDisponibilidade(int skuId, int dispId)
-        {
-            Sku sku = skuService.Get(skuId);
-            if (sku == null)
-            {
-                return NotFound();
-            }
-
-            Disponibilidade disp = dispService.Get(dispId);
-            if (disp == null)
-            {
-                return NotFound();
-            }
-
-            dispService.Delete(disp.Id);
-
-            return Ok();
-        }
-
-        // Post skuId/disponibilidades
-        [HttpPost]
-        [Route("{skuId}/disponibilidades")]
-        public IHttpActionResult CreateDisponibilidade(int skuId, Disponibilidade disp)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Sku sku = skuService.Get(skuId);
-            if (sku == null)
-            {
-                return NotFound();
-            }
-
-            disp.SkuId = skuId;
-            dispService.Create(disp);
-
-            sku.Disponibilidades.Add(disp);
-            skuService.Update(sku);
-
-            return Ok(sku);
-        }
-
-        // Patch skuId/disponibilidades
-        [HttpPatch]
-        [Route("{skuId}/disponibilidades/{dispId}")]
-        public IHttpActionResult UpdateDisponibilidade(int skuId, int dispId, Disponibilidade disp)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            Sku sku = skuService.Get(skuId);
-            if (sku == null)
-            {
-                return NotFound();
-            }
-
-            Disponibilidade returnedDisp;
-            Disponibilidade alteredDisp = disp;
-            try
-            {
-                alteredDisp.Id = dispId;
-                returnedDisp = dispService.Update(alteredDisp);
-            }
-            // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
-            // Usually happens when you try to attach an altered entity on the top of an existing one
-            catch (DbUpdateConcurrencyException)
-            {
-                throw;
-            }
-
-            if (returnedDisp == null)
-            {
-                return NotFound();
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-        #endregion Disponibilidades
-
-        [HttpPost]
-        [Route("order")]
-        public IHttpActionResult ProcessOrder(OrderForm[] orders)
-        {
-            if (ModelState.IsValid == false)
-            {
-                return BadRequest(ModelState);
-            }
-
-            foreach (OrderForm order in orders)
-            {
-                try
-                {
-                    orderService.ProcessOrder(order);
-                }
-                catch (OrderException ex)
-                {
-                    throw ex;
-                }
-            }
-
-            return Ok(orders);
-        }
+        //    return Ok(orders);
+        //}
 
         private Sku ExpandedSku(Sku sku)
         {
