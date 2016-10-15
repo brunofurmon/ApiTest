@@ -14,9 +14,9 @@ namespace ApiTest.Models
         public string Nome { get; set; }
         virtual public ICollection<AtributoDoGrupo> Atributos { get; set; }
 
-        //public Grupo()
-        //{
-        //    Atributos = new List<AtributoDoGrupo>();
-        //}
+        public Grupo()
+        {
+            Atributos = new List<AtributoDoGrupo>();
+        }
     }
 }

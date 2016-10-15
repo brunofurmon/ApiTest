@@ -26,12 +26,12 @@ namespace ApiTest.Models
         public string CodigoProduto { get; set; }
 
         // Initializes enumerable properties
-        //public Sku()
-        //{
-        //    Imagens = new List<Imagem>();
-        //    Grupos = new List<Grupo>();
-        //    Marketplaces = new List<SkuMarketplaceGetResponse>();
-        //    Disponibilidades = new List<Disponibilidade>();
-        //}
+        public Sku()
+        {
+            Imagens = new List<Imagem>();
+            Grupos = new List<Grupo>();
+            Marketplaces = new List<SkuMarketplaceGetResponse>();
+            Disponibilidades = new List<Disponibilidade>();
+        }
     }
 }
