@@ -82,7 +82,7 @@ namespace ApiTest.Services
             return success;
         }
 
-        List<T> Search(Expression<Func<T, bool>> predicate)
+        public List<T> Search(Expression<Func<T, bool>> predicate)
         {
             List<T> beans;
             using (AbstractDao<T> dao = new GenericDao<T>())
