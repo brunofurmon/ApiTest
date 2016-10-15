@@ -32,8 +32,15 @@ namespace ApiTest.Controllers
         [ResponseType(typeof(List<Sku>))]
         public IHttpActionResult List()
         {
+            // For simplicity, Disponibilidades will be added here
             List<Sku> list = skuService.List();
-            return Ok(list);
+            List<Sku> expandedList = new List<Sku>();
+            foreach (Sku s in list)
+            {
+                Sku newSku = ExpandedSku(s);
+                expandedList.Add(newSku);
+            }
+            return Ok(expandedList);
         }
 
         // GET: api/skus/5
@@ -48,6 +55,8 @@ namespace ApiTest.Controllers
                 return NotFound();
             }
 
+            Sku newSku = ExpandedSku(sku);
+            
             return Ok(sku);
         }
 
@@ -192,8 +201,11 @@ namespace ApiTest.Controllers
             {
                 return NotFound();
             }
-            sku.Disponibilidades.Add(disp);
 
+            disp.SkuId = skuId;
+            dispService.Create(disp);
+
+            sku.Disponibilidades.Add(disp);
             skuService.Update(sku);
 
             return Ok(sku);
@@ -260,6 +272,20 @@ namespace ApiTest.Controllers
             }
 
             return Ok(orders);
+        }
+
+        private Sku ExpandedSku(Sku sku)
+        {
+            if (sku == null)
+            {
+                return null;
+            }
+
+            Sku expandedSku = sku;
+            List<Disponibilidade> disponibilidades = dispService.Search(d => d.SkuId == sku.Id);
+            expandedSku.Disponibilidades = disponibilidades;
+
+            return expandedSku;
         }
     }
 }
