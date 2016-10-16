@@ -108,7 +108,7 @@ namespace ApiTest.Controllers
             sku.Disponibilidades.Add(disp);
             skuService.Update(sku);
 
-            return Created("api", new { });
+            return Created("api", "");
         }
 
         // Patch skuId/disponibilidades

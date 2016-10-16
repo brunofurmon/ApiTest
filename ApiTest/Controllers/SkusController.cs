@@ -98,7 +98,7 @@ namespace ApiTest.Controllers
                 return NotFound();
             }
 
-            return Ok(HttpStatusCode.NoContent);
+            return Ok();
         }
 
         // POST: api/skus
@@ -131,7 +131,7 @@ namespace ApiTest.Controllers
 
             skuService.Delete(id);
 
-            return Ok(HttpStatusCode.NoContent);
+            return Ok();
         }
         #endregion Skus
 
