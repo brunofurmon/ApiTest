@@ -19,7 +19,7 @@ namespace ApiTest.Models
         public string Url { get; set; }
         public bool ForaDeLinha { get; set; }
         public int Estoque { get; set; }
-        public Dimensoes Dimensoes { get; set; }
+        virtual public Dimensoes Dimensoes { get; set; }
         virtual public ICollection<Imagem> Imagens { get; set; }
         virtual public ICollection<Grupo> Grupos { get; set; }
         virtual public ICollection<SkuMarketplaceGetResponse> Marketplaces { get; set; }

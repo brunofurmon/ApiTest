@@ -14,13 +14,23 @@ namespace ApiTest.Controllers
     {
         private IAbstractService<Sku> skuService { get; set; }
         private IAbstractService<Disponibilidade> dispService { get; set; }
+        private IAbstractService<Imagem> imagemService { get; set; }
+        private IAbstractService<Dimensoes> dimensoesService { get; set; }
+        private IAbstractService<Grupo> grupoService { get; set; }
+        private IAbstractService<AtributoDoGrupo> atributoDoGrupoService { get; set; }
+        private IAbstractService<SkuMarketplaceGetResponse> marketplaceService { get; set; }
         private IOrderService orderService { get; set; }
 
         public SkusController() : base()
         {
             this.skuService = new SkuService();
             this.dispService = new DisponibilidadeService();
-            this.orderService = new OrderService();
+            this.dimensoesService = new DimensoesService();
+            this.imagemService = new ImagemService();
+            this.grupoService = new GrupoService();
+            this.atributoDoGrupoService = new AtributoDoGrupoService();
+            this.marketplaceService = new MarketplaceService();
+            //this.orderService = new OrderService();
         }
 
         #region Skus
@@ -149,16 +159,42 @@ namespace ApiTest.Controllers
         //    return Ok(orders);
         //}
 
+        // In OData, this is similar to the ?$expand=[prop1,prop2,...] call
         private Sku ExpandedSku(Sku sku)
         {
             if (sku == null)
             {
                 return null;
             }
-
             Sku expandedSku = sku;
+
+            // Disponibilidades
             List<Disponibilidade> disponibilidades = dispService.Search(d => d.SkuId == sku.Id);
             expandedSku.Disponibilidades = disponibilidades;
+
+            // Imagens
+            List<Imagem> imagens = imagemService.Search(i => i.SkuId == sku.Id);
+            expandedSku.Imagens = imagens;
+
+            // Grupos
+            List<Grupo> grupos = grupoService.Search(g => g.SkuId == sku.Id);
+            List<Grupo> completeGrupos = new List<Grupo>();
+            foreach (Grupo g in grupos)
+            {
+                List<AtributoDoGrupo> atributos = atributoDoGrupoService.Search(a => a.GrupoId == g.Id);
+                Grupo completeGrupo = g;
+                completeGrupo.Atributos = atributos;
+                completeGrupos.Add(completeGrupo);
+            }
+            expandedSku.Grupos = completeGrupos;
+
+            // Dimensoes
+            Dimensoes dimensoes = dimensoesService.Get(sku.Id);
+            expandedSku.Dimensoes = dimensoes;
+
+            // Marketplace
+            List<SkuMarketplaceGetResponse> marketplaces = marketplaceService.Search(m => m.SkuId == sku.Id);
+            expandedSku.Marketplaces = marketplaces;
 
             return expandedSku;
         }

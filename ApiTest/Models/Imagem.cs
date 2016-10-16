@@ -15,5 +15,11 @@ namespace ApiTest.Models
         public string Maior { get; set; }
         public string Zoom { get; set; }
         public int Ordem { get; set; }
+
+        // Foreign Key
+        [JsonIgnore]
+        public int SkuId { get; set; }
+        [JsonIgnore]
+        public virtual Sku Sku { get; set; }
     }
 }

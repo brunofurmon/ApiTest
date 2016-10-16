@@ -132,7 +132,12 @@
     <Compile Include="Models\SkuMarketplaceGetResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AbstractService.cs" />
+    <Compile Include="Services\AtributoDoGrupoService.cs" />
+    <Compile Include="Services\DimensoesService.cs" />
     <Compile Include="Services\DisponibilidadeService.cs" />
+    <Compile Include="Services\GrupoService.cs" />
+    <Compile Include="Services\ImagemService.cs" />
+    <Compile Include="Services\MarketplaceService.cs" />
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\SkuService.cs" />
   </ItemGroup>

@@ -7,13 +7,17 @@ namespace ApiTest.Models
 {
     public class Dimensoes: IAbstractModel
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        // One-to-zero-or-one
+        [Key, ForeignKey("Sku")]
         [JsonIgnore]
         public int Id { get; set; }
         public decimal Altura { get; set; }
         public decimal Largura { get; set; }
         public decimal Comprimento { get; set; }
         public decimal Peso { get; set; }
+
+        // Foreign Key
+        [JsonIgnore]
+        public virtual Sku Sku { get; set; }
     }
 }
