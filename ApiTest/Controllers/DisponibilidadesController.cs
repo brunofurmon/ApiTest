@@ -133,6 +133,7 @@ namespace ApiTest.Controllers
             try
             {
                 alteredDisp.Id = dispId;
+                alteredDisp.SkuId = skuId;
                 returnedDisp = dispService.Update(alteredDisp);
             }
             // Occurs whenever an user attaches an instance (with valid identifier) that was already attached.
