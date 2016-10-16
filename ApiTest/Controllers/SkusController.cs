@@ -128,7 +128,8 @@ namespace ApiTest.Controllers
             {
                 return NotFound();
             }
-
+            // Here, Dimensoes share a common Id, so it needs to be explicitly erased in the same scope
+            dimensoesService.Delete(id);
             skuService.Delete(id);
 
             return Ok();
