@@ -7,6 +7,9 @@ using ApiTest.Services;
 using System.Linq;
 using ApiTest.Dto;
 using ApiTest.Exceptions;
+using System.Net;
+using System.Text;
+using System;
 
 namespace ApiTest.Controllers
 {
@@ -188,6 +191,24 @@ namespace ApiTest.Controllers
             }
 
             return Ok(orders);
+        }
+
+        // Generic call to API. Currently, there is only returns the XHR response from epicom's API
+        [HttpGet]
+        [Route("callEpicom")]
+        public IHttpActionResult CallEpicom()
+        {
+            WebRequest webRequest = WebRequest.Create("https://sandboxmhubapi.epicom.com.br/v1");
+
+            string username = "897F8D21A9F5A";
+            string password = "Ip15q6u7X15EP22GS36XoNLrX2Jz0vqq";
+
+            string credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes(username + ":" + password));
+
+            webRequest.Headers.Add("Authorization", "Basic " + credentials);
+            WebResponse webResp = webRequest.GetResponse();
+
+            return Ok(webResp);
         }
 
         // In OData, this is similar to the ?$expand=[prop1,prop2,...] call
