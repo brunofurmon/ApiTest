@@ -16,13 +16,13 @@ namespace ApiTest.Daos
         /// GET: api/T/5
         T Get(int bean);
         /// Search
-        List<T> SearchFor(Expression<Func<T, bool>> predicate);
         /// PUT: api/Ts/5
         T Update(T bean);
         /// POST: api/Ts
         T Create(T bean);
         /// DELETE: api/Ts/5
         T Delete(int id);
+        IQueryable<T> SearchFor(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null);
     }
 
     public abstract class AbstractDao<T> : DbContext, IGenericDao<T> where T : class, IAbstractModel
@@ -72,10 +72,21 @@ namespace ApiTest.Daos
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public List<T> SearchFor(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> SearchFor(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
-            IQueryable<T> bean = db.Where(predicate);
-            return (bean == null)? null: bean.ToList();
+            IQueryable<T> query = db.AsQueryable();
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (orderBy != null)
+            {
+                query = orderBy(query);
+            }
+
+            return query;
         }
 
         public virtual T Update(T bean)

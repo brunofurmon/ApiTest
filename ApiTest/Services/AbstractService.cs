@@ -2,6 +2,7 @@
 using ApiTest.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace ApiTest.Services
@@ -18,7 +19,7 @@ namespace ApiTest.Services
         T Update(T bean);
         //Delete
         T Delete(int id);
-        List<T> Search(Expression<Func<T, bool>> predicate);
+        IQueryable<T> Search(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null);
     }
 
     public abstract class AbstractService<T>: IAbstractService<T> where T: class, IAbstractModel
@@ -82,13 +83,14 @@ namespace ApiTest.Services
             return success;
         }
 
-        public List<T> Search(Expression<Func<T, bool>> predicate)
+        public IQueryable<T> Search(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null)
         {
-            List<T> beans;
-            using (AbstractDao<T> dao = new GenericDao<T>())
-            {
-                beans = dao.SearchFor(predicate);
-            }
+            IQueryable<T> beans;
+            //using (AbstractDao<T> dao = new GenericDao<T>())
+            //{
+            AbstractDao<T> dao = new GenericDao<T>();
+            beans = dao.SearchFor(filter, orderBy);
+            //}
 
             return beans;
         }

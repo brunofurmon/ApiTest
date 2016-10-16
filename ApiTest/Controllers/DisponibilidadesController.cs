@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
-using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ApiTest.Models;
 using ApiTest.Services;
-using ApiTest.Dto;
-using ApiTest.Exceptions;
+using System.Linq;
 
 
 namespace ApiTest.Controllers
@@ -37,7 +35,7 @@ namespace ApiTest.Controllers
                 return NotFound();
             }
 
-            List<Disponibilidade> disps = dispService.Search(d => d.SkuId == skuId);
+            List<Disponibilidade> disps = dispService.Search(d => d.SkuId == skuId).ToList();
 
             return Ok(disps);
         }
@@ -54,7 +52,7 @@ namespace ApiTest.Controllers
                 return NotFound();
             }
 
-            List<Disponibilidade> disp = dispService.Search(d => d.SkuId == skuId && d.Id == dispId);
+            List<Disponibilidade> disp = dispService.Search(d => d.SkuId == skuId && d.Id == dispId).ToList();
 
             if (disp.Count == 0)
             {

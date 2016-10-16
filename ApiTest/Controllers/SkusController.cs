@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
-using System.Net;
 using System.Web.Http;
 using System.Web.Http.Description;
 using ApiTest.Models;
 using ApiTest.Services;
+using System.Linq;
 
 
 namespace ApiTest.Controllers
@@ -136,6 +136,35 @@ namespace ApiTest.Controllers
         }
         #endregion Skus
 
+        [HttpGet]
+        [Route("available")]
+        [ResponseType(typeof(List<Sku>))]
+        public List<Sku> Available(decimal minPrice = 10.00M, decimal maxPrice = 40.00M)
+        {
+            // First, we get Disponibilidades ordered by Price ascending
+            List<Disponibilidade> disponibilidades = dispService.Search(
+                // Predicates
+                filter: d => d.Disponivel == true && d.Preco >= minPrice && d.Preco <= maxPrice, 
+                orderBy: q => q.OrderBy(d => d.Preco)
+                )
+                .ToList();
+
+            List<Sku> skus = new List<Sku>();
+            foreach (Disponibilidade d in disponibilidades)
+            {
+                Sku availableSku = skuService.Search(
+                    filter: s => s.Id == d.SkuId,
+                    orderBy: null).FirstOrDefault();
+                if (!skus.Exists(s => s.Id == availableSku.Id))
+                {
+                    Sku expandedSku = ExpandedSku(availableSku);
+                    skus.Add(expandedSku);
+                }
+            }
+            
+            return skus;
+        }
+
         //[HttpPost]
         //[Route("order")]
         //public IHttpActionResult ProcessOrder(OrderForm[] orders)
@@ -170,19 +199,19 @@ namespace ApiTest.Controllers
             Sku expandedSku = sku;
 
             // Disponibilidades
-            List<Disponibilidade> disponibilidades = dispService.Search(d => d.SkuId == sku.Id);
+            List<Disponibilidade> disponibilidades = dispService.Search(d => d.SkuId == sku.Id).ToList();
             expandedSku.Disponibilidades = disponibilidades;
 
             // Imagens
-            List<Imagem> imagens = imagemService.Search(i => i.SkuId == sku.Id);
+            List<Imagem> imagens = imagemService.Search(i => i.SkuId == sku.Id).ToList();
             expandedSku.Imagens = imagens;
 
             // Grupos
-            List<Grupo> grupos = grupoService.Search(g => g.SkuId == sku.Id);
+            List<Grupo> grupos = grupoService.Search(g => g.SkuId == sku.Id).ToList();
             List<Grupo> completeGrupos = new List<Grupo>();
             foreach (Grupo g in grupos)
             {
-                List<AtributoDoGrupo> atributos = atributoDoGrupoService.Search(a => a.GrupoId == g.Id);
+                List<AtributoDoGrupo> atributos = atributoDoGrupoService.Search(a => a.GrupoId == g.Id).ToList();
                 Grupo completeGrupo = g;
                 completeGrupo.Atributos = atributos;
                 completeGrupos.Add(completeGrupo);
@@ -194,7 +223,7 @@ namespace ApiTest.Controllers
             expandedSku.Dimensoes = dimensoes;
 
             // Marketplace
-            List<SkuMarketplaceGetResponse> marketplaces = marketplaceService.Search(m => m.SkuId == sku.Id);
+            List<SkuMarketplaceGetResponse> marketplaces = marketplaceService.Search(m => m.SkuId == sku.Id).ToList();
             expandedSku.Marketplaces = marketplaces;
 
             return expandedSku;
