@@ -26,6 +26,7 @@ namespace ApiTest.Services
             switch (orderType)
             {
                 case ApiEnums.OrderType.SkuCreation:
+                    // Currently, this does nothing, in favor of automatic insertion
                     Sku newSku = new Sku { Id = parametros.IdSku };
                     using (AbstractDao<Sku> dao = new GenericDao<Sku>())
                     {
