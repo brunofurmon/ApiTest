@@ -5,7 +5,8 @@ using System.Web.Http.Description;
 using ApiTest.Models;
 using ApiTest.Services;
 using System.Linq;
-
+using ApiTest.Dto;
+using ApiTest.Exceptions;
 
 namespace ApiTest.Controllers
 {
@@ -30,7 +31,7 @@ namespace ApiTest.Controllers
             this.grupoService = new GrupoService();
             this.atributoDoGrupoService = new AtributoDoGrupoService();
             this.marketplaceService = new MarketplaceService();
-            //this.orderService = new OrderService();
+            this.orderService = new OrderService();
         }
 
         #region Skus
@@ -134,7 +135,6 @@ namespace ApiTest.Controllers
 
             return Ok();
         }
-        #endregion Skus
 
         [HttpGet]
         [Route("available")]
@@ -164,30 +164,31 @@ namespace ApiTest.Controllers
             
             return skus;
         }
+        #endregion Skus
 
-        //[HttpPost]
-        //[Route("order")]
-        //public IHttpActionResult ProcessOrder(OrderForm[] orders)
-        //{
-        //    if (ModelState.IsValid == false)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        [HttpPost]
+        [Route("processOrder")]
+        public IHttpActionResult ProcessOrder(OrderForm[] orders)
+        {
+            if (ModelState.IsValid == false)
+            {
+                return BadRequest(ModelState);
+            }
 
-        //    foreach (OrderForm order in orders)
-        //    {
-        //        try
-        //        {
-        //            orderService.ProcessOrder(order);
-        //        }
-        //        catch (OrderException ex)
-        //        {
-        //            throw ex;
-        //        }
-        //    }
+            foreach (OrderForm order in orders)
+            {
+                try
+                {
+                    orderService.ProcessOrder(order);
+                }
+                catch (OrderException ex)
+                {
+                    throw ex;
+                }
+            }
 
-        //    return Ok(orders);
-        //}
+            return Ok(orders);
+        }
 
         // In OData, this is similar to the ?$expand=[prop1,prop2,...] call
         private Sku ExpandedSku(Sku sku)

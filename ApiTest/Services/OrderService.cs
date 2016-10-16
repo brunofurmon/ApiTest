@@ -14,24 +14,23 @@ namespace ApiTest.Services
 
     public class OrderService: IOrderService
     {
-        private IGenericDao<Sku> skuDao { get; set; }
-
         public OrderService() : base()
         {
-            this.skuDao = new GenericDao<Sku>();
         }
 
         public void ProcessOrder(OrderForm order)
         {
             string orderString = order.Tipo;
             ApiEnums.OrderType orderType = GetOrderTypeFromString(orderString);
-
+            Parametros parametros = order.Parametros;
             switch (orderType)
             {
                 case ApiEnums.OrderType.SkuCreation:
-                    //Sku newSku = Sku.FromForm(order.Parametros);
-                    Sku newSku = new Sku();
-                    skuDao.Create(newSku);
+                    Sku newSku = new Sku { Id = parametros.IdSku };
+                    using (AbstractDao<Sku> dao = new GenericDao<Sku>())
+                    {
+                        dao.Create(newSku);
+                    }
                     break;
 
                 default:

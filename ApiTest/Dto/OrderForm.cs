@@ -1,6 +1,5 @@
-﻿using ApiTest.Components;
-using System;
-using static ApiTest.Components.ApiEnums;
+﻿using System;
+
 
 namespace ApiTest.Dto
 {
@@ -8,14 +7,12 @@ namespace ApiTest.Dto
     {
         public string Tipo { get; set; }
         public DateTime DataEnvio { get; set; }
-        public SkuForm Parametros { get; set; }
+        public Parametros Parametros { get; set; }
     }
 
-    public class SkuForm
+    public class Parametros
     {
-        public long IdProduto { get; set; }
-        public long IdSku { get; set; }
-        public decimal Preco { get; set; }
-        public Availability Disponivel { get; set; } 
+        public int IdProduto { get; set; }
+        public int IdSku { get; set; }
     }
 }
