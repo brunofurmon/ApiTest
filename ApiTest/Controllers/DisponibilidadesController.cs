@@ -83,7 +83,7 @@ namespace ApiTest.Controllers
 
             dispService.Delete(disp.Id);
 
-            return Ok(HttpStatusCode.NoContent);
+            return Ok();
         }
 
         // Post skuId/disponibilidades
@@ -108,7 +108,7 @@ namespace ApiTest.Controllers
             sku.Disponibilidades.Add(disp);
             skuService.Update(sku);
 
-            return Created("api", HttpStatusCode.NoContent);
+            return Created("api", new { });
         }
 
         // Patch skuId/disponibilidades
@@ -147,7 +147,7 @@ namespace ApiTest.Controllers
                 return NotFound();
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok();
         }
         #endregion Disponibilidades
     }

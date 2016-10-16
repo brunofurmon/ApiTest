@@ -104,7 +104,7 @@ namespace ApiTest.Controllers
 
             skuService.Create(sku);
 
-            return Created("api", sku);
+            return Created("api", new{});
         }
 
         // DELETE: api/skus/5
