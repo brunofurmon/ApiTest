@@ -43,13 +43,8 @@ namespace ApiTest.Daos
                 m.MapInheritedProperties();
             });
 
-            // One Sku to Many Disponibilidades
-            modelBuilder.Entity<Disponibilidade>()
-                    .HasRequired<Sku>(s => s.Sku)
-                    .WithMany(s => s.Disponibilidades);
-
             // Does not try to pluralize portuguese names in english (was generating "Grupoes, Imagems, AtributoDoGrupoes" and stuff like that...)
-            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
             base.OnModelCreating(modelBuilder);
         }
